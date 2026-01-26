@@ -384,6 +384,8 @@
 	export function createNode(parentId: string | null, node: TreeNodeItem) {
 		store.createNode(parentId, node);
 		oncreate?.({ parentId, node });
+		const state = $store;
+		onnodeschange?.(state.nodes);
 	}
 
 	export function deleteNode(id: string) {
@@ -391,6 +393,8 @@
 		if (node) {
 			store.deleteNode(id);
 			ondelete?.({ node });
+			const state = $store;
+			onnodeschange?.(state.nodes);
 		}
 	}
 

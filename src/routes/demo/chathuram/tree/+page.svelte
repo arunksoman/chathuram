@@ -109,35 +109,35 @@
 		const hasChildren = node.children && node.children.length > 0;
 		const type = node.children !== undefined ? 'folder' : 'file';
 		selectedInfo = `${node.name} (${type}, ID: ${node.id})`;
-		logEvent(`✓ Selected: ${node.name}`);
+		logEvent(`Selected: ${node.name}`);
 	}
 
 	function handleExpand(event: TreeNodeEvent) {
 		const node = event.node;
-		logEvent(`📂 Expanded: ${node.name}`);
+		logEvent(`Expanded: ${node.name}`);
 	}
 
 	function handleCollapse(event: TreeNodeEvent) {
 		const node = event.node;
-		logEvent(`📁 Collapsed: ${node.name}`);
+		logEvent(`Collapsed: ${node.name}`);
 	}
 
 	function handleRename(event: TreeRenameEvent) {
-		logEvent(`✏️ Renamed "${event.oldName}" → "${event.name}"`);
+		logEvent(`Renamed "${event.oldName}" → "${event.name}"`);
 	}
 
 	function handleCreate(event: TreeCreateEvent) {
 		const location = event.parentId ? `in parent ${event.parentId}` : 'at root';
-		logEvent(`➕ Created: ${event.node.name} (${location})`);
+		logEvent(`Created: ${event.node.name} (${location})`);
 	}
 
 	function handleDelete(event: TreeNodeEvent) {
 		const node = event.node;
-		logEvent(`🗑️ Deleted: ${node.name}`);
+		logEvent(`Deleted: ${node.name}`);
 	}
 
 	function handleDrop(event: TreeDropEvent) {
-		logEvent(`🔄 Moved node ${event.sourceId} → ${event.targetId}`);
+		logEvent(`Moved node ${event.sourceId} → ${event.targetId}`);
 	}
 
 	function handleNodesChange(newNodes: TreeNodeItem[]) {
@@ -157,7 +157,7 @@
 				};
 				treeComponent.createNode(parent.id, newNode);
 			} else {
-				logEvent('⚠️ Cannot add child to a file. Select a folder instead.');
+				logEvent('Cannot add child to a file. Select a folder instead.');
 			}
 		} else {
 			const newNode: TreeNodeItem = {
@@ -167,7 +167,7 @@
 				children: []
 			};
 			treeComponent.createNode(null, newNode);
-			logEvent('➕ Added new root folder');
+			logEvent('Added new root folder');
 		}
 	}
 
@@ -204,7 +204,7 @@
 				treeComponent.deleteNode(node.id);
 			});
 		} else {
-			logEvent('⚠️ No nodes selected');
+			logEvent('No nodes selected');
 		}
 	}
 
@@ -213,20 +213,20 @@
 		if (selected && selected.length === 1) {
 			treeComponent.startEditing(selected[0].id);
 		} else if (selected && selected.length > 1) {
-			logEvent('⚠️ Can only rename one node at a time');
+			logEvent('Can only rename one node at a time');
 		} else {
-			logEvent('⚠️ No node selected');
+			logEvent('No node selected');
 		}
 	}
 
 	function expandAllNodes() {
 		treeComponent?.expandAll();
-		logEvent('📂 Expanded all nodes');
+		logEvent('Expanded all nodes');
 	}
 
 	function collapseAllNodes() {
 		treeComponent?.collapseAll();
-		logEvent('📁 Collapsed all nodes');
+		logEvent('Collapsed all nodes');
 	}
 
 	let contextMenu = $state({
@@ -254,43 +254,51 @@
 
 	function handleContextAction(action: string) {
 		const nodeId = contextMenu.nodeId;
-		if (!nodeId) return;
+		if (!nodeId) {
+			contextMenu.visible = false;
+			return;
+		}
 
 		const node = treeComponent?.getSelectedNodes().find(n => n.id === nodeId) || 
 		             findNodeById(treeData, nodeId);
 
-		switch (action) {
-			case 'rename':
-				treeComponent.startEditing(nodeId);
-				break;
-			case 'delete':
-				treeComponent.deleteNode(nodeId);
-				break;
-			case 'add-child':
-				if (node && node.children !== undefined) {
-					treeComponent.createNode(nodeId, {
-						id: `node-${Date.now()}`,
-						name: 'New Child',
-						editable: true
-					});
-				} else {
-					logEvent('⚠️ Cannot add child to a file');
-				}
-				break;
-			case 'add-folder':
-				if (node && node.children !== undefined) {
-					treeComponent.createNode(nodeId, {
-						id: `folder-${Date.now()}`,
-						name: 'New Folder',
-						editable: true,
-						children: []
-					});
-				} else {
-					logEvent('⚠️ Cannot add folder to a file');
-				}
-				break;
-		}
+		// Close menu immediately to prevent it from blocking the action
 		contextMenu.visible = false;
+
+		// Execute action after menu closes
+		setTimeout(() => {
+			switch (action) {
+				case 'rename':
+					treeComponent?.startEditing(nodeId);
+					break;
+				case 'delete':
+					treeComponent?.deleteNode(nodeId);
+					break;
+				case 'add-child':
+					if (node && node.children !== undefined) {
+						treeComponent?.createNode(nodeId, {
+							id: `node-${Date.now()}`,
+							name: 'New Child',
+							editable: true
+						});
+					} else {
+						logEvent('Cannot add child to a file');
+					}
+					break;
+				case 'add-folder':
+					if (node && node.children !== undefined) {
+						treeComponent?.createNode(nodeId, {
+							id: `folder-${Date.now()}`,
+							name: 'New Folder',
+							editable: true,
+							children: []
+						});
+					} else {
+						logEvent('Cannot add folder to a file');
+					}
+					break;
+			}
+		}, 0);
 	}
 
 	function findNodeById(nodes: TreeNodeItem[], id: string): TreeNodeItem | null {
@@ -307,7 +315,7 @@
 	function clearSelections() {
 		treeComponent?.clearSelection();
 		selectedInfo = '';
-		logEvent('🔄 Cleared all selections');
+		logEvent('Cleared all selections');
 	}
 
 	function clearLog() {
@@ -319,7 +327,7 @@
 	<h1>Tree Component Demo</h1>
 
 	<div class="controls-section">
-		<h2>🎮 Controls</h2>
+		<h2>Controls</h2>
 
 		<div class="control-group">
 			<label>
@@ -340,32 +348,32 @@
 
 		<div class="button-group">
 			<button onclick={addNewNode} class="btn btn-primary">
-				<span>➕</span> Add Item
+				Add Item
 			</button>
 			<button onclick={addNewFolder} class="btn btn-primary">
-				<span>📁</span> Add Folder
+				Add Folder
 			</button>
 			<button onclick={renameSelected} class="btn btn-secondary">
-				<span>✏️</span> Rename
+				Rename
 			</button>
 			<button onclick={deleteSelected} class="btn btn-error">
-				<span>🗑️</span> Delete
+				Delete
 			</button>
 			<button onclick={expandAllNodes} class="btn btn-secondary">
-				<span>📂</span> Expand All
+				Expand All
 			</button>
 			<button onclick={collapseAllNodes} class="btn btn-secondary">
-				<span>📁</span> Collapse All
+				Collapse All
 			</button>
 			<button onclick={clearSelections} class="btn btn-neutral">
-				<span>🔄</span> Clear Selection
+				Clear Selection
 			</button>
 		</div>
 	</div>
 
 	<div class="main-content">
 		<div class="tree-section">
-			<h2>📁 File Tree</h2>
+			<h2>File Tree</h2>
 			<div class="tree-wrapper">
 				<Tree
 					bind:this={treeComponent}
@@ -385,7 +393,7 @@
 				>
 					{#snippet empty()}
 						<div class="empty-state">
-							<p>📭 No files or folders to display</p>
+						<p>No files or folders to display</p>
 							<button onclick={addNewNode} class="btn btn-primary">Add First Item</button>
 						</div>
 					{/snippet}
@@ -395,7 +403,7 @@
 
 		<div class="side-panel">
 			<div class="info-panel">
-				<h2>ℹ️ Selection Info</h2>
+				<h2>Selection Info</h2>
 				<div class="selection-display">
 					{#if selectedInfo}
 						<p class="selected-node">{selectedInfo}</p>
@@ -407,7 +415,7 @@
 
 			<div class="info-panel event-panel">
 				<div class="panel-header">
-					<h2>📋 Event Log</h2>
+					<h2>Event Log</h2>
 					<button onclick={clearLog} class="btn-clear">Clear</button>
 				</div>
 				<div class="event-log">
@@ -425,23 +433,23 @@
 	{#if contextMenu.visible}
 		<div class="context-menu" style="top: {contextMenu.y}px; left: {contextMenu.x}px;">
 			<button class="menu-item" onclick={() => handleContextAction('rename')}>
-				<span>✏️</span> Rename
+				Rename
 			</button>
 			<button class="menu-item" onclick={() => handleContextAction('add-child')}>
-				<span>➕</span> Add Item
+				Add Item
 			</button>
 			<button class="menu-item" onclick={() => handleContextAction('add-folder')}>
-				<span>📁</span> Add Folder
+				Add Folder
 			</button>
 			<div class="menu-divider"></div>
 			<button class="menu-item delete" onclick={() => handleContextAction('delete')}>
-				<span>🗑️</span> Delete
+				Delete
 			</button>
 		</div>
 	{/if}
 
 	<div class="instructions-section">
-		<h2>⌨️ Keyboard Shortcuts</h2>
+		<h2>Keyboard Shortcuts</h2>
 		<div class="shortcuts-grid">
 			<div class="shortcut">
 				<kbd>↓</kbd>
@@ -493,7 +501,7 @@
 			</div>
 		</div>
 
-		<h3>✨ Features & Instructions</h3>
+		<h3>Features & Instructions</h3>
 		<ul>
 			<li><strong>Select:</strong> Click on any node to select it</li>
 			<li><strong>Multi-Select:</strong> Enable multi-select mode and Ctrl+Click nodes</li>
@@ -507,7 +515,7 @@
 			<li><strong>Type-ahead Search:</strong> Press any letter to jump to matching nodes</li>
 		</ul>
 
-		<h3>💡 Tips</h3>
+		<h3>Tips</h3>
 		<ul class="tips">
 			<li>Folders can contain children, files cannot</li>
 			<li>When dragging, you can only drop onto folders (nodes with children property)</li>
@@ -598,10 +606,6 @@
 		font-size: 0.938rem;
 		cursor: pointer;
 		transition: all 0.15s ease;
-	}
-
-	.btn span {
-		font-size: 1rem;
 	}
 
 	.btn-primary {
@@ -839,7 +843,7 @@
 	}
 
 	ul.tips li::before {
-		content: '💡';
+		content: '▸';
 	}
 
 	.context-menu {
@@ -883,10 +887,6 @@
 	.menu-item.delete:hover {
 		background: var(--color-error);
 		color: var(--color-error-content);
-	}
-
-	.menu-item span {
-		font-size: 1rem;
 	}
 
 	.menu-divider {
