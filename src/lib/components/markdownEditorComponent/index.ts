@@ -10,6 +10,6 @@ export type {
 	MarkdownFormTheme, 
 	MarkdownFormMode,
 	MarkdownFormState 
-} from './markdownEditorComponent.types';
-export { getThemeTokens } from './markdownEditorComponent.theme';
-export type { MarkdownFormThemeTokens } from './markdownEditorComponent.theme';
+} from './markdownEditorComponent.types.js';
+export { getThemeTokens } from './markdownEditorComponent.theme.js';
+export type { MarkdownFormThemeTokens } from './markdownEditorComponent.theme.js';

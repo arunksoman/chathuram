@@ -4,7 +4,7 @@
  */
 
 import { writable, derived, get } from 'svelte/store';
-import type { TreeNodeItem, TreeState, FlatTreeNode, DragState } from './types';
+import type { TreeNodeItem, TreeState, FlatTreeNode, DragState } from './types.js';
 
 /**
  * Create a tree store for managing tree state

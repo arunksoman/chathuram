@@ -4,7 +4,7 @@
  * Contains theme-specific tokens for light and dark modes.
  */
 
-import type { MarkdownFormTheme } from './markdown-form.types';
+import type { MarkdownFormTheme } from './markdown-form.types.js';
 
 export interface MarkdownFormThemeTokens {
 	/** Background color for the form container */

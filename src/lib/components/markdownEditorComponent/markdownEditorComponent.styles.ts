@@ -4,7 +4,7 @@
  * Provides style utilities and constants for the Markdown Editor component.
  */
 
-import type { MarkdownFormThemeTokens } from './markdownEditorComponent.theme';
+import type { MarkdownFormThemeTokens } from './markdownEditorComponent.theme.js';
 
 /**
  * Generate inline styles for the component

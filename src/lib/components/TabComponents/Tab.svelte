@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Close, Dot } from '@icon-park/svg';
-	import { createEventDispatcher } from 'svelte';
 
 	interface Props {
 		id: string;
@@ -10,6 +9,8 @@
 		closable?: boolean;
 		icon?: string | null;
 		ariaLabel?: string;
+		onclick?: (event: { id: string }) => void;
+		onclose?: (event: { id: string }) => void;
 	}
 
 	let {
@@ -19,22 +20,18 @@
 		edited = false,
 		closable = true,
 		icon = null,
-		ariaLabel = title
+		ariaLabel = title,
+		onclick,
+		onclose
 	}: Props = $props();
 
-	const dispatch = createEventDispatcher<{
-		click: { id: string };
-		close: { id: string };
-		toggleEdited: { id: string };
-	}>();
-
 	function handleClick() {
-		dispatch('click', { id });
+		onclick?.({ id });
 	}
 
 	function handleClose(e: MouseEvent) {
 		e.stopPropagation();
-		dispatch('close', { id });
+		onclose?.({ id });
 	}
 
 	function handleKeyDown(e: KeyboardEvent) {

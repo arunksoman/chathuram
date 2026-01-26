@@ -3,7 +3,7 @@
  * Defines theme tokens and default color mappings
  */
 
-import type { ProgressColorRule, ProgressBarTheme } from './progressbarComponent.types';
+import type { ProgressColorRule, ProgressBarTheme } from './progressbarComponent.types.js';
 
 /**
  * Theme-specific color tokens for progress bar

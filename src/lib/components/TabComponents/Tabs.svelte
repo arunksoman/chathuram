@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { Plus } from '@icon-park/svg';
-	import { createEventDispatcher } from 'svelte';
 	import Tab from './Tab.svelte';
-	import type { TabItem } from './tabsStore';
+	import type { TabItem } from './tabsStore.js';
 
 	interface Props {
 		tabs: TabItem[];
@@ -10,6 +9,10 @@
 		maxTabs?: number | null;
 		closable?: boolean;
 		showAddButton?: boolean;
+		onadd?: (tab: TabItem) => void;
+		onclose?: (tabId: string) => void;
+		onactivate?: (tabId: string) => void;
+		oneditchange?: (event: { id: string; edited: boolean }) => void;
 	}
 
 	let {
@@ -17,15 +20,12 @@
 		activeTabId = $bindable(null),
 		maxTabs = null,
 		closable = true,
-		showAddButton = true
+		showAddButton = true,
+		onadd,
+		onclose,
+		onactivate,
+		oneditchange
 	}: Props = $props();
-
-	const dispatch = createEventDispatcher<{
-		add: TabItem;
-		close: string;
-		activate: string;
-		editChange: { id: string; edited: boolean };
-	}>();
 
 	let tablistRef: HTMLDivElement | null = $state(null);
 	let focusedTabIndex = $state(0);
@@ -40,14 +40,12 @@
 		}
 	});
 
-	function handleTabClick(event: CustomEvent<{ id: string }>) {
-		const tabId = event.detail.id;
-		dispatch('activate', tabId);
+	function handleTabClick(event: { id: string }) {
+		onactivate?.(event.id);
 	}
 
-	function handleTabClose(event: CustomEvent<{ id: string }>) {
-		const tabId = event.detail.id;
-		dispatch('close', tabId);
+	function handleTabClose(event: { id: string }) {
+		onclose?.(event.id);
 	}
 
 	function handleAddTab() {
@@ -62,7 +60,7 @@
 			createdAt: Date.now()
 		};
 
-		dispatch('add', newTab);
+		onadd?.(newTab);
 	}
 
 	function handleKeyDown(e: KeyboardEvent) {
@@ -96,14 +94,14 @@
 			case 'Delete':
 				if (closable && tabs[focusedTabIndex]) {
 					e.preventDefault();
-					dispatch('close', tabs[focusedTabIndex].id);
+					onclose?.(tabs[focusedTabIndex].id);
 				}
 				break;
 
 			case 'w':
 				if ((e.ctrlKey || e.metaKey) && closable && tabs[focusedTabIndex]) {
 					e.preventDefault();
-					dispatch('close', tabs[focusedTabIndex].id);
+					onclose?.(tabs[focusedTabIndex].id);
 				}
 				break;
 		}
@@ -132,8 +130,8 @@
 				active={tab.id === activeTabId}
 				edited={tab.edited}
 				{closable}
-				on:click={handleTabClick}
-				on:close={handleTabClose}
+				onclick={handleTabClick}
+				onclose={handleTabClose}
 			/>
 		{/each}
 	</div>

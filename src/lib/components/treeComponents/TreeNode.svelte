@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { FolderClose, FolderOpen, More } from '@icon-park/svg';
-	import type { TreeNodeItem, TreeIcons } from './types';
-	import type { TreeStore } from './treeStore';
+	import type { TreeNodeItem, TreeIcons } from './types.js';
+	import type { TreeStore } from './treeStore.js';
 	import TreeNode from './TreeNode.svelte';
 
 	interface TreeNodeProps {
@@ -140,11 +140,18 @@
 		store.setFocus(node.id);
 	}
 
+	function handleNodeDoubleClick(e: MouseEvent) {
+		e.stopPropagation();
+		e.preventDefault();
+		// Start editing on double-click if node is editable
+		if (node.editable !== false) {
+			store.startEditing(node.id);
+		}
+	}
+
 	function finishEditing() {
 		if (isEditing && editValue.trim() !== '' && editValue !== node.name) {
-			store.renameNode(node.id, editValue.trim(), (id, newName, oldName) => {
-				// Callback is handled by Tree component
-			});
+			store.renameNode(node.id, editValue.trim());
 		} else {
 			store.stopEditing();
 		}
@@ -248,6 +255,7 @@
 	ondrop={handleDrop}
 	ondragend={handleDragEnd}
 	onclick={handleNodeClick}
+	ondblclick={handleNodeDoubleClick}
 	oncontextmenu={handleContextMenu}
 	onkeydown={(e) => {
 		// Don't handle keyboard shortcuts when editing

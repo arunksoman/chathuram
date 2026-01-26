@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { toastStore } from '$lib/components/toastComponent/toastStore';
+	import { toastStore } from '$lib/components/toastComponent/toastStore.js';
 
 	function showSuccessToast() {
 		toastStore.show('File uploaded successfully!', {

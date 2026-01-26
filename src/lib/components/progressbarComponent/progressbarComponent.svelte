@@ -5,12 +5,12 @@
 	 * and can change color dynamically based on progress thresholds
 	 */
 
-	import type { ProgressBarProps } from './progressbarComponent.types';
+	import type { ProgressBarProps } from './progressbarComponent.types.js';
 	import {
 		getDefaultColorRules,
 		getTrackColor,
 		resolveProgressColor
-	} from './progressbarComponent.theme';
+	} from './progressbarComponent.theme.js';
 
 	// Props with defaults
 	let {

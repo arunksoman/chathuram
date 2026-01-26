@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { marked } from 'marked';
 	import DOMPurify from 'dompurify';
-	import type { MarkdownFormProps } from './markdownEditorComponent.types';
-	import { getThemeTokens } from './markdownEditorComponent.theme';
+	import type { MarkdownFormProps } from './markdownEditorComponent.types.js';
+	import { getThemeTokens } from './markdownEditorComponent.theme.js';
 	import {
 		getComponentStyles,
 		containerClass,
@@ -11,7 +11,7 @@
 		buttonGroupClass,
 		buttonClass,
 		statusTextClass
-	} from './markdownEditorComponent.styles';
+	} from './markdownEditorComponent.styles.js';
 
 	/**
 	 * Markdown Form Component

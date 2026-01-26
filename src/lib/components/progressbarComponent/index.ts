@@ -3,10 +3,10 @@
  */
 
 export { default as ProgressBar } from './progressbarComponent.svelte';
-export type { ProgressBarProps, ProgressBarTheme, ProgressColorRule } from './progressbarComponent.types';
+export type { ProgressBarProps, ProgressBarTheme, ProgressColorRule } from './progressbarComponent.types.js';
 export {
 	getDefaultColorRules,
 	getTrackColor,
 	resolveProgressColor,
 	progressBarThemeColors
-} from './progressbarComponent.theme';
+} from './progressbarComponent.theme.js';

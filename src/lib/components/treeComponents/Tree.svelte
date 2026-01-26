@@ -1,8 +1,9 @@
 <script lang="ts">
 	import TreeNode from './TreeNode.svelte';
-	import { createTreeStore } from './treeStore';
-	import type { TreeNodeItem, TreeIcons, TreeNodeEvent, TreeRenameEvent, TreeCreateEvent, TreeDropEvent } from './types';
+	import { createTreeStore } from './treeStore.js';
+	import type { TreeNodeItem, TreeIcons, TreeNodeEvent, TreeRenameEvent, TreeCreateEvent, TreeDropEvent, TreeState } from './types.js';
 	import { untrack } from 'svelte';
+	import { get } from 'svelte/store';
 
 	interface TreeProps {
 		nodes: TreeNodeItem[];
@@ -55,16 +56,43 @@
 	let containerElement: HTMLDivElement;
 	let lastEmittedNodes: TreeNodeItem[] | null = null;
 
-	// Wrap store to intercept rename calls
+	// Wrap store to intercept rename and drag/drop calls
 	const wrappedStore = {
 		...store,
 		renameNode: (id: string, newName: string, callback?: (id: string, newName: string, oldName: string) => void) => {
 			const node = store.findNode(id);
 			const oldName = node?.name || '';
-			store.renameNode(id, newName, (nodeId, name, old) => {
+			store.renameNode(id, newName, (nodeId: string, name: string, old: string) => {
 				onrename?.({ id: nodeId, name, oldName: old });
 				callback?.(nodeId, name, old);
 			});
+			// Trigger nodes change after rename
+			const state = get(store) as TreeState;
+			onnodeschange?.(state.nodes);
+		},
+		moveNode: (sourceId: string, targetId: string) => {
+			store.moveNode(sourceId, targetId);
+			ondrop?.({ sourceId, targetId });
+			// Trigger nodes change after move
+			const state = get(store) as TreeState;
+			onnodeschange?.(state.nodes);
+		},
+		createNode: (parentId: string | null, node: TreeNodeItem) => {
+			store.createNode(parentId, node);
+			oncreate?.({ parentId, node });
+			// Trigger nodes change after create
+			const state = get(store) as TreeState;
+			onnodeschange?.(state.nodes);
+		},
+		deleteNode: (id: string) => {
+			const node = store.findNode(id);
+			if (node) {
+				store.deleteNode(id);
+				ondelete?.({ node });
+				// Trigger nodes change after delete
+				const state = get(store) as TreeState;
+				onnodeschange?.(state.nodes);
+			}
 		}
 	};
 
@@ -94,7 +122,7 @@
 		const state = $store;
 
 		// Dispatch expand/collapse events
-		state.expandedIds.forEach((id) => {
+		state.expandedIds.forEach((id: string) => {
 			const node = store.findNode(id);
 			if (node) {
 				// Only dispatch if this is a new expansion
@@ -344,7 +372,7 @@
 	}
 
 	export function renameNode(id: string, name: string) {
-		store.renameNode(id, name, (nodeId, newName, oldName) => {
+		store.renameNode(id, name, (nodeId: string, newName: string, oldName: string) => {
 			onrename?.({ id: nodeId, name: newName, oldName });
 		});
 	}
@@ -369,7 +397,7 @@
 	export function getSelectedNodes(): TreeNodeItem[] {
 		const state = $store;
 		const selected: TreeNodeItem[] = [];
-		state.selectedIds.forEach((id) => {
+		state.selectedIds.forEach((id: string) => {
 			const node = store.findNode(id);
 			if (node) selected.push(node);
 		});
@@ -379,7 +407,7 @@
 	export function getExpandedNodes(): TreeNodeItem[] {
 		const state = $store;
 		const expanded: TreeNodeItem[] = [];
-		state.expandedIds.forEach((id) => {
+		state.expandedIds.forEach((id: string) => {
 			const node = store.findNode(id);
 			if (node) expanded.push(node);
 		});

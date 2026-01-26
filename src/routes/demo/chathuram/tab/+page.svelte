@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Tabs from '$lib/components/TabComponents/Tabs.svelte';
-	import { tabsStore, type TabItem } from '$lib/components/TabComponents/tabsStore';
+	import { tabsStore, type TabItem } from '$lib/components/TabComponents/tabsStore.js';
 	import { Edit } from '@icon-park/svg';
 
 	// Initialize with one default tab
@@ -11,31 +11,38 @@
 		}
 	});
 
-	const state = $derived($tabsStore);
+	// Create reactive state that can be bound
+	let tabs = $state<TabItem[]>($tabsStore.tabs);
+	let activeTabId = $state<string | null>($tabsStore.activeTabId);
 
-	function handleAddTab(event: CustomEvent<TabItem>) {
-		// Tab already added via store in Tabs component event
-		// This handler is optional for additional logic
+	// Sync with store changes
+	$effect(() => {
+		tabs = $tabsStore.tabs;
+		activeTabId = $tabsStore.activeTabId;
+	});
+
+	function handleAddTab() {
+		tabsStore.addTab();
 	}
 
-	function handleCloseTab(event: CustomEvent<string>) {
-		tabsStore.closeTab(event.detail);
+	function handleCloseTab(id: string) {
+		tabsStore.closeTab(id);
 	}
 
-	function handleActivateTab(event: CustomEvent<string>) {
-		tabsStore.activateTab(event.detail);
+	function handleActivateTab(id: string) {
+		tabsStore.activateTab(id);
 	}
 
 	function toggleEditedForActiveTab() {
-		if (state.activeTabId) {
-			const tab = state.tabs.find((t) => t.id === state.activeTabId);
+		if (activeTabId) {
+			const tab = tabs.find((t) => t.id === activeTabId);
 			if (tab) {
-				tabsStore.setEdited(state.activeTabId, !tab.edited);
+				tabsStore.setEdited(activeTabId, !tab.edited);
 			}
 		}
 	}
 
-	const activeTab = $derived(state.tabs.find((t) => t.id === state.activeTabId));
+	const activeTab = $derived(tabs.find((t) => t.id === activeTabId));
 </script>
 
 <div class="demo-container">
@@ -48,11 +55,11 @@
 
 	<div class="tabs-wrapper">
 		<Tabs
-			bind:tabs={state.tabs}
-			bind:activeTabId={state.activeTabId}
-			on:add={(e) => tabsStore.addTab()}
-			on:close={handleCloseTab}
-			on:activate={handleActivateTab}
+			bind:tabs
+			bind:activeTabId
+			onadd={handleAddTab}
+			onclose={handleCloseTab}
+			onactivate={handleActivateTab}
 		/>
 	</div>
 

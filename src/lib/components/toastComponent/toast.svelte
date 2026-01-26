@@ -2,8 +2,8 @@
 	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { Copy, Close } from '@icon-park/svg';
-	import { toastStore } from '$lib/components/ui/toastComponent/toastStore';
-	import type { ToastType } from '$lib/components/ui/toastComponent/toastStore';
+	import { toastStore } from '$lib/components/toastComponent/toastStore.js';
+	import type { ToastType } from '$lib/components/toastComponent/toastStore.js';
 
 	interface Props {
 		id: string;
@@ -66,7 +66,7 @@
 >
 	<!-- Accent Strip -->
 	<div
-		class="absolute left-0 top-0 bottom-0 w-[3px]"
+		class="absolute left-0 top-0 bottom-0 w-0.75"
 		style="background-color: {accentColor};"
 	></div>
 
