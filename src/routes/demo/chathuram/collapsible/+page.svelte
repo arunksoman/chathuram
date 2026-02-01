@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CollapsibleComponent } from '$lib/components/collapsibleComponent';
+	import { CollapsibleComponent } from '$lib/components/collapsibleComponent/index.js';
 	import Card from '$lib/components/Card/Card.svelte';
 	import { Down, Help, Code, Clipboard, CheckOne } from '@icon-park/svg';
 
@@ -80,7 +80,7 @@
 	<title>Collapsible Component Demo - ElasticGaze</title>
 </svelte:head>
 
-<div class="container mx-auto p-8 space-y-12">
+<div class="min-h-screen p-8 space-y-12" style="background-color: var(--color-base-200);">
 	<!-- Header -->
 	<header class="mb-8">
 		<h1 class="text-4xl font-bold mb-2" style="color: var(--color-primary)">

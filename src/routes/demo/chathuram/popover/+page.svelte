@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Popover, type PopoverPlacement } from '$lib/components/popoverComponents';
+	import { Popover, type PopoverPlacement } from '$lib/components/popoverComponents/index.js';
 	
 	let basicOpen = $state(false);
 	let arrowOpen = $state(false);
@@ -23,8 +23,9 @@
 	}
 </script>
 
-<div class="container mx-auto p-8 max-w-4xl">
-	<h1 class="text-3xl font-bold mb-8" style:color="var(--color-base-content)">
+<div class="min-h-screen" style="background-color: var(--color-base-200);">
+	<div class="p-8 max-w-4xl mx-auto">
+		<h1 class="text-3xl font-bold mb-8" style:color="var(--color-base-content)">
 		Popover Component Demo
 	</h1>
 
@@ -335,6 +336,7 @@
 				</ul>
 			</div>
 		</section>
+	</div>
 	</div>
 </div>
 

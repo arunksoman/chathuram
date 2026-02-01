@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
 	import type { Snippet } from 'svelte';
-	import type { CollapsibleProps } from './collapsibleComponent.types';
-	import { getTransitionClasses, generateId, isControlled } from './collapsibleComponent.utils';
+	import type { CollapsibleProps } from './collapsibleComponent.types.js';
+	import { getTransitionClasses, generateId, isControlled } from './collapsibleComponent.utils.js';
 
 	interface Props extends CollapsibleProps {
 		trigger?: Snippet;
