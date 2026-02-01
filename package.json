@@ -1,6 +1,6 @@
 {
 	"name": "chathuram",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run prepack",
@@ -27,6 +27,70 @@
 		".": {
 			"types": "./dist/index.d.ts",
 			"svelte": "./dist/index.js"
+		},
+		"./alert": {
+			"types": "./dist/components/alertComponent/index.d.ts",
+			"svelte": "./dist/components/alertComponent/index.js"
+		},
+		"./card": {
+			"types": "./dist/components/Card/Card.svelte.d.ts",
+			"svelte": "./dist/components/Card/Card.svelte"
+		},
+		"./code-editor": {
+			"types": "./dist/components/codeEditorComponents/index.d.ts",
+			"svelte": "./dist/components/codeEditorComponents/index.js"
+		},
+		"./collapsible": {
+			"types": "./dist/components/collapsibleComponent/index.d.ts",
+			"svelte": "./dist/components/collapsibleComponent/index.js"
+		},
+		"./context-menu": {
+			"types": "./dist/components/contextMenuComponents/index.d.ts",
+			"svelte": "./dist/components/contextMenuComponents/index.js"
+		},
+		"./data-table": {
+			"types": "./dist/components/dataTableComponent/index.d.ts",
+			"svelte": "./dist/components/dataTableComponent/index.js"
+		},
+		"./form": {
+			"types": "./dist/components/formComponents/index.d.ts",
+			"svelte": "./dist/components/formComponents/index.js"
+		},
+		"./markdown-editor": {
+			"types": "./dist/components/markdownEditorComponent/index.d.ts",
+			"svelte": "./dist/components/markdownEditorComponent/index.js"
+		},
+		"./modal": {
+			"types": "./dist/components/modalComponents/index.d.ts",
+			"svelte": "./dist/components/modalComponents/index.js"
+		},
+		"./popover": {
+			"types": "./dist/components/popoverComponents/index.d.ts",
+			"svelte": "./dist/components/popoverComponents/index.js"
+		},
+		"./progress-bar": {
+			"types": "./dist/components/progressbarComponent/index.d.ts",
+			"svelte": "./dist/components/progressbarComponent/index.js"
+		},
+		"./splitter": {
+			"types": "./dist/components/splitterComponents/index.d.ts",
+			"svelte": "./dist/components/splitterComponents/index.js"
+		},
+		"./tabs": {
+			"types": "./dist/components/TabComponents/index.d.ts",
+			"svelte": "./dist/components/TabComponents/index.js"
+		},
+		"./toast": {
+			"types": "./dist/components/toastComponent/index.d.ts",
+			"svelte": "./dist/components/toastComponent/index.js"
+		},
+		"./sidebar": {
+			"types": "./dist/components/sideBarComponents/index.d.ts",
+			"svelte": "./dist/components/sideBarComponents/index.js"
+		},
+		"./tree": {
+			"types": "./dist/components/treeComponents/index.d.ts",
+			"svelte": "./dist/components/treeComponents/index.js"
 		}
 	},
 	"peerDependencies": {
