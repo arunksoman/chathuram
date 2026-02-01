@@ -67,7 +67,6 @@ export function createCodeMirrorEditor(options: UseCodeMirrorOptions): EditorVie
 	// Compartments for dynamic configuration
 	const readOnlyCompartment = new Compartment();
 	const themeCompartment = new Compartment();
-	const editableCompartment = new Compartment();
 
 	// Base extensions
 	const extensions: Extension[] = [
@@ -101,9 +100,8 @@ export function createCodeMirrorEditor(options: UseCodeMirrorOptions): EditorVie
 		// Theme
 		themeCompartment.of(theme === 'dark' ? darkTheme : lightTheme),
 		
-		// Read-only mode
+		// Read-only mode - only use EditorState.readOnly to allow focus while preventing edits
 		readOnlyCompartment.of(EditorState.readOnly.of(readOnly)),
-		editableCompartment.of(EditorView.editable.of(!readOnly)),
 		
 		// Tab size
 		EditorState.tabSize.of(tabSize),
