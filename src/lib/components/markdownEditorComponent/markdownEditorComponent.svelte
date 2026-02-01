@@ -40,7 +40,10 @@
 	}: MarkdownFormProps = $props();
 
 	// State
-	let mode = $state<'edit' | 'preview'>(defaultPreview ? 'preview' : 'edit');
+	let mode = $state<'edit' | 'preview'>('edit');
+	$effect(() => {
+		mode = defaultPreview ? 'preview' : 'edit';
+	});
 	let textareaElement: HTMLTextAreaElement | null = $state(null);
 	let announcementText = $state('');
 

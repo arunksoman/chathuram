@@ -30,7 +30,10 @@
 		onselect
 	}: TreeNodeProps = $props();
 
-	let editValue = $state(node.name);
+	let editValue = $state('');
+	$effect(() => {
+		editValue = node.name;
+	});
 	let inputElement = $state<HTMLInputElement>();
 	let extractedMethod = $state<{ method: string; color: string } | null>(null);
 

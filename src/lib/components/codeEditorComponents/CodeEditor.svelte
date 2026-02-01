@@ -16,7 +16,7 @@
 	
 	import { onMount, onDestroy } from 'svelte';
 	import { EditorView } from '@codemirror/view';
-	import { createCodeMirrorEditor, updateValue } from './useCodeMirror';
+	import { createCodeMirrorEditor, updateValue } from './useCodeMirror.js';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
@@ -57,8 +57,8 @@
 	let showZoomIndicator = $state(false);
 	let zoomTimeout: ReturnType<typeof setTimeout> | null = null;
 	let currentTheme = $state<'dark' | 'light'>('dark');
-	let previousReadOnly = $state(readOnly);
-	let previousTheme = $state(theme);
+	let previousReadOnly = $state<boolean | undefined>(undefined);
+	let previousTheme = $state<'auto' | 'light' | 'dark' | undefined>(undefined);
 	let isInitialized = $state(false);
 
 	/**

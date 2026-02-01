@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ContextMenuItem from './ContextMenuItem.svelte';
-	import type { ContextMenuItemData } from './contextMenuStore';
+	import type { ContextMenuItemData } from './contextMenuStore.js';
 	
 	interface Props {
 		label?: string;
@@ -12,7 +12,7 @@
 	let { label, items, id, onselect }: Props = $props();
 	
 	// Generate unique ID if not provided
-	const groupId = id || `context-group-${Math.random().toString(36).substr(2, 9)}`;
+	const groupId = $derived(id || `context-group-${Math.random().toString(36).substr(2, 9)}`);
 </script>
 
 <div role="group" aria-labelledby={label ? `${groupId}-label` : undefined} class="menu-group">

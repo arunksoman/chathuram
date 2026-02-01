@@ -15,8 +15,8 @@
 		type ColumnSizingState
 	} from '@tanstack/table-core';
 	import { Filter } from '@icon-park/svg';
-	import type { DataTableProps } from './dataTableComponent.types';
-	import { convertToTableColumn } from './dataTableComponent.utils';
+	import type { DataTableProps } from './dataTableComponent.types.js';
+	import { convertToTableColumn } from './dataTableComponent.utils.js';
 	import { createSvelteTable } from './dataTableComponent.adapter.svelte';
 
 	// Props
@@ -33,22 +33,31 @@
 	let columnSizing = $state<ColumnSizingState>({});
 	let pagination = $state<PaginationState>({
 		pageIndex: 0,
-		pageSize: paginationConfig?.pageSize || 10
+		pageSize: 10
+	});
+
+	// Sync pagination pageSize with config when it changes
+	$effect(() => {
+		if (paginationConfig?.pageSize && pagination.pageSize !== paginationConfig.pageSize) {
+			pagination = { ...pagination, pageSize: paginationConfig.pageSize };
+		}
 	});
 
 	// Filter state
 	let activeFilterColumn = $state<string | null>(null);
 	let filterInputs = $state<Record<string, string>>({});
 
-	// Convert columns
-	const tableColumns = columns.map(convertToTableColumn);
+	// Convert columns - use $derived to react to column changes
+	const tableColumns = $derived(columns.map(convertToTableColumn));
 
 	// Create table instance
 	const table = createSvelteTable({
 		get data() {
 			return data;
 		},
-		columns: tableColumns,
+		get columns() {
+			return tableColumns;
+		},
 		state: {
 			get sorting() {
 				return sorting;
@@ -118,10 +127,10 @@
 		}
 	}
 
-	// Pagination config
-	const showPageSizeSelector = paginationConfig?.showPageSizeSelector !== false;
-	const showPaginationInfo = paginationConfig?.showPaginationInfo !== false;
-	const pageSizeOptions = paginationConfig?.pageSizeOptions || [10, 25, 50, 100];
+	// Pagination config - use $derived to react to prop changes
+	const showPageSizeSelector = $derived(paginationConfig?.showPageSizeSelector !== false);
+	const showPaginationInfo = $derived(paginationConfig?.showPaginationInfo !== false);
+	const pageSizeOptions = $derived(paginationConfig?.pageSizeOptions || [10, 25, 50, 100]);
 </script>
 
 <div class="w-full {className}">

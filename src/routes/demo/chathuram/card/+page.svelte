@@ -2,8 +2,8 @@
 <script lang="ts">
   import Card from '$lib/components/Card/Card.svelte';
   import Button from '$lib/components/formComponents/Button.svelte';
-  import { Copy, Setting, Check, Delete } from '@icon-park/svg';
-  import { toastStore } from '$lib/components/toastComponent/toastStore';
+  import { Copy, Setting, Check } from '@icon-park/svg';
+  import { toastStore } from '$lib/components/toastComponent/toastStore.js';
 
   function handleCardClick(message: string) {
     toastStore.show(message, { type: 'info' });

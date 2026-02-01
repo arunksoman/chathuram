@@ -5,7 +5,7 @@
 	 */
 
 	import DataTableComponent from '$lib/components/dataTableComponent/dataTableComponent.svelte';
-	import type { DataTableColumn } from '$lib/components/dataTableComponent';
+	import type { DataTableColumn } from '$lib/components/dataTableComponent/index.js';
 	import Button from '$lib/components/formComponents/Button.svelte';
 	import ProgressbarComponent from '$lib/components/progressbarComponent/progressbarComponent.svelte';
 	import Modal from '$lib/components/modalComponents/Modal.svelte';
@@ -168,7 +168,7 @@
 			accessorKey: 'status',
 			width: 120,
 			enable_filter: true,
-			cell: (row) => {
+			cell: (row: User) => {
 				const colors = {
 					active: 'var(--color-success)',
 					inactive: 'var(--color-error)',
@@ -207,7 +207,7 @@
 			header: 'Progress',
 			width: 200,
 			enable_sort: false,
-			cell: (row) => {
+			cell: (row: User) => {
 				// Render progress bar as HTML with inline styles
 				const percentage = row.progress;
 				const color = percentage < 30 ? 'var(--color-error)' : percentage < 70 ? 'var(--color-warning)' : 'var(--color-success)';
@@ -224,7 +224,7 @@
 			width: 300,
 			enable_sort: false,
 			is_resizable: false,
-			cell: (row) => {
+			cell: (row: User) => {
 				// Return multiple buttons - using window functions for onclick
 				return `
 					<div style="display: flex; gap: 0.5rem;">
@@ -296,7 +296,7 @@
 			id: 'price',
 			header: 'Price',
 			width: 120,
-			cell: (row) => {
+			cell: (row: Product) => {
 				return `<span style="font-weight: 600; color: var(--color-success);">$${row.price.toFixed(2)}</span>`;
 			}
 		},
@@ -305,7 +305,7 @@
 			header: 'Stock',
 			accessorKey: 'stock',
 			width: 100,
-			cell: (row) => {
+			cell: (row: Product) => {
 				const color = row.stock < 50 ? 'var(--color-error)' : 'var(--color-base-content)';
 				return `<span style="color: ${color};">${row.stock}</span>`;
 			}
@@ -315,7 +315,7 @@
 			header: 'Rating',
 			width: 150,
 			enable_sort: false,
-			cell: (row) => {
+			cell: (row: Product) => {
 				const stars = '★'.repeat(row.rating) + '☆'.repeat(5 - row.rating);
 				return `<span style="color: var(--color-warning); font-size: 1.2em;">${stars}</span>`;
 			}
@@ -326,7 +326,7 @@
 			width: 120,
 			enable_sort: false,
 			is_resizable: false,
-			cell: (row) => {
+			cell: (row: Product) => {
 				return `
 					<button 
 						onclick="(${handleBuyProduct})('${row.id}')"
@@ -545,11 +545,11 @@
 			<div class="space-y-4">
 				<div class="grid grid-cols-2 gap-4">
 					<div>
-						<label class="text-sm font-semibold opacity-70">ID</label>
+						<span class="text-sm font-semibold opacity-70">ID</span>
 						<p class="text-base">{selectedUser.id}</p>
 					</div>
 					<div>
-						<label class="text-sm font-semibold opacity-70">Status</label>
+						<span class="text-sm font-semibold opacity-70">Status</span>
 						<p class="text-base">
 							<span
 								style="color: {selectedUser.status === 'active'
@@ -564,23 +564,23 @@
 					</div>
 				</div>
 				<div>
-					<label class="text-sm font-semibold opacity-70">Name</label>
+					<span class="text-sm font-semibold opacity-70">Name</span>
 					<p class="text-base">{selectedUser.name}</p>
 				</div>
 				<div>
-					<label class="text-sm font-semibold opacity-70">Email</label>
+					<span class="text-sm font-semibold opacity-70">Email</span>
 					<p class="text-base">{selectedUser.email}</p>
 				</div>
 				<div>
-					<label class="text-sm font-semibold opacity-70">Department</label>
+					<span class="text-sm font-semibold opacity-70">Department</span>
 					<p class="text-base">{selectedUser.department}</p>
 				</div>
 				<div>
-					<label class="text-sm font-semibold opacity-70">Join Date</label>
+					<span class="text-sm font-semibold opacity-70">Join Date</span>
 					<p class="text-base">{selectedUser.joinDate}</p>
 				</div>
 				<div>
-					<label class="text-sm font-semibold opacity-70">Progress</label>
+					<span class="text-sm font-semibold opacity-70">Progress</span>
 					<div class="flex items-center gap-3">
 						<div
 							style="flex: 1; height: 12px; background-color: var(--color-base-300); border-radius: var(--radius-field); overflow: hidden;"

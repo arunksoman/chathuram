@@ -27,7 +27,10 @@
 	}: Props = $props();
 
 	// Internal state for uncontrolled mode
-	let internalOpen = $state(defaultOpen);
+	let internalOpen = $state(false);
+	$effect(() => {
+		internalOpen = defaultOpen;
+	});
 	
 	// Computed open state - controlled or uncontrolled
 	let isOpen = $derived(isControlled(open) ? (open ?? false) : internalOpen);
