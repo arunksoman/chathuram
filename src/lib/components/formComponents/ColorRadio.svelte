@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ENV_COLOR_OPTIONS, DEFAULT_ENV_COLOR } from '$lib/core/constants';
+	import { ENV_COLOR_OPTIONS, DEFAULT_ENV_COLOR } from '$lib/core/constants.js';
 
 	interface ColorOption {
 		value: string;
